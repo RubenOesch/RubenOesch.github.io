@@ -3,163 +3,400 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ruben</title>
+    <title>Ruben Oesch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Lato', sans-serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
             line-height: 1.6;
-            max-width: 1000px;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(250, 250, 250, 0.99) 100%);
+            padding: 2rem 5%;
+            border-bottom: 2px solid #d4af37;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-content {
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        h1 {
-            color: white;
-            border-bottom: 3px solid #ffd700;
-            padding-bottom: 10px;
-            animation: slideInDown 0.8s ease;
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 3px;
         }
-        h2 {
-            color: #333;
-            margin-top: 30px;
-            animation: fadeIn 1s ease;
+
+        nav a {
+            color: #1a1a1a;
+            text-decoration: none;
+            margin-left: 2.5rem;
+            font-weight: 300;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
         }
-        p {
-            color: #555;
-            background-color: white;
-            padding: 15px;
-            border-radius: 5px;
-            animation: slideInUp 0.8s ease;
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #d4af37;
+            transition: width 0.3s ease;
         }
-        .image-container {
-            margin: 20px 0;
-            animation: zoomIn 1s ease;
-        }
-        .image-container img {
+
+        nav a:hover::after {
             width: 100%;
-            max-width: 600px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease;
         }
-        .image-container img:hover {
-            transform: scale(1.05);
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(250, 250, 250, 0.95) 100%), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(212,175,55,0.03)" stroke-width="1"/></pattern></defs><rect width="1200" height="800" fill="rgba(255,255,255,1)"/><rect width="1200" height="800" fill="url(%23grid)" /></svg>');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        .vision-section, .contact-section {
-            background-color: white;
-            padding: 25px;
-            border-radius: 10px;
-            margin: 20px 0;
-            animation: slideInUp 1s ease;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s ease-in-out infinite;
         }
-        .contact-info {
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) translateX(0px); }
+            50% { transform: translateY(-30px) translateX(-20px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 2rem;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            line-height: 1.1;
+            color: #1a1a1a;
+        }
+
+        .gold-text {
+            color: #d4af37;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 2.5rem;
+            color: #555555;
+            letter-spacing: 1px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 50px;
+            background: linear-gradient(135deg, #d4af37 0%, #e6c547 100%);
+            color: #0a0a0a;
+            text-decoration: none;
+            font-weight: 700;
+            border: 2px solid #d4af37;
+            transition: all 0.4s ease;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Features Section */
+        .features {
+            max-width: 1400px;
+            margin: 6rem auto;
+            padding: 5rem;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
         }
-        .contact-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            animation: fadeIn 1.5s ease;
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(245, 245, 245, 0.8) 0%, rgba(240, 240, 240, 0.8) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
         }
-        .contact-card strong {
-            display: block;
-            margin-bottom: 5px;
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
         }
-        
-        @keyframes slideInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
+
+        .feature-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .feature-card:hover {
+            border-color: #d4af37;
+            box-shadow: 0 20px 60px rgba(212, 175, 55, 0.15);
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #d4af37;
+        }
+
+        .feature-card p {
+            color: #555555;
+            font-weight: 300;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(250, 250, 250, 1) 100%);
+            border-top: 2px solid #d4af37;
+            padding: 3rem 5%;
+            text-align: center;
+            margin-top: 6rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-content p {
+            color: #666666;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #d4af37;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #ffffff;
+        }
+
+        .divider {
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            margin: 2rem auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+
+            nav a {
+                margin-left: 1rem;
+                font-size: 0.85rem;
+            }
+
+            .features {
+                padding: 2rem;
+            }
+
+            .hero-content {
+                padding: 1rem;
+            }
+
+            header {
+                padding: 1.5rem 3%;
             }
         }
-        
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
         }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+
+        ::-webkit-scrollbar-track {
+            background: #f5f5f5;
         }
-        
-        @keyframes zoomIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #e6c547;
         }
     </style>
 </head>
 <body>
-    <h1>Ruben</h1>
-    <p>Ruben ist ein weit verbreiteter männlicher Vorname mit hebräischen Wurzeln. Der Name bedeutet "Siehe, ein Sohn".</p>
-    
-    <h2>Geschichte</h2>
-    <p>Der Name stammt aus der Bibel und wird dort als einer der Söhne Jakobs erwähnt. Ruben war der erste Sohn und war ein wichtiger Anführer im Alten Testament.</p>
-    
-    <h2>Popularität</h2>
-    <p>Ruben ist ein zeitloser Name, der in vielen Kulturen und Ländern beliebt ist. Er wird oft als moderner, aber auch klassischer Name wahrgenommen.</p>
-    
-    <div class="image-container">
-        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80" alt="Professionelle Atmosphäre">
-    </div>
-    
-    <div class="vision-section">
-        <h2>🎯 Meine Vision</h2>
-        <p>Meine Vision ist es, innovative Lösungen zu schaffen, die Menschen verbinden und positive Veränderungen in der Welt bewirken. Ich glaube an die Kraft von Technologie und Kreativität, um Herausforderungen zu lösen und Potenziale zu erschließen.</p>
-        <p>Ich strebe danach, nicht nur qualitativ hochwertige Arbeit zu leisten, sondern auch inspirierende Projekte zu entwickeln, die nachhaltigen Mehrwert schaffen. Zusammenarbeit, Innovation und kontinuierliches Lernen sind die Grundpfeiler meiner Arbeitsweise.</p>
-    </div>
-    
-    <div class="image-container">
-        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80" alt="Team und Zusammenarbeit">
-    </div>
-    
-    <div class="contact-section">
-        <h2>📧 Kontakt</h2>
-        <p>Ich freue mich auf den Austausch mit Ihnen! Kontaktieren Sie mich gerne:</p>
-        <div class="contact-info">
-            <div class="contact-card">
-                <strong>📧 Email</strong>
-                ruben@example.com
-            </div>
-            <div class="contact-card">
-                <strong>📱 Telefon</strong>
-                +49 (0) 123 456789
-            </div>
-            <div class="contact-card">
-                <strong>💼 LinkedIn</strong>
-                linkedin.com/in/ruben
-            </div>
-            <div class="contact-card">
-                <strong>🌐 Website</strong>
-                www.ruben-portfolio.de
-            </div>
+    <header>
+        <div class="header-content">
+            <div class="logo">Ruben</div>
+            <nav>
+                <a href="#home">Home</a>
+                <a href="#features">Features</a>
+                <a href="#contact">Kontakt</a>
+            </nav>
         </div>
-    </div>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Ruben <span class="gold-text">Oesch</span></h1>
+            <p class="subtitle">Professionell & Zuverlässig</p>
+            <a href="#contact" class="cta-button">Kontaktieren</a>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="feature-card">
+            <div class="feature-icon">✨</div>
+            <h3>Professionell</h3>
+            <p>Hochwertige und zuverlässige Arbeit in jedem Projekt. Kompetenz und Genauigkeit sind meine Stärken.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Effizient</h3>
+            <p>Schnelle Bearbeitung ohne Kompromisse bei der Qualität. Zeit ist kostbar und ich respektiere Ihre Zeit.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3>Zuverlässig</h3>
+            <p>Sie können sich auf mich verlassen. Pünktlichkeit und Pünktlichkeit sind garantiert.</p>
+        </div>
+    </section>
+
+    <section id="contact" style="max-width: 1400px; margin: 6rem auto; padding: 5rem; text-align: center;">
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 3rem; margin-bottom: 2rem; color: #1a1a1a;">
+            Kontakt <span class="gold-text">aufnehmen</span>
+        </h2>
+        <div class="divider"></div>
+        <p style="font-size: 1.1rem; color: #555; margin: 2rem 0;">
+            Rufen Sie mich an oder schreiben Sie eine Nachricht.
+        </p>
+        <p style="font-size: 2rem; color: #d4af37; font-weight: bold; margin: 2rem 0;">
+            <a href="tel:+41791302007" style="color: #d4af37; text-decoration: none; transition: all 0.3s ease;" onmouseover="this.style.color='#0a0a0a'; this.style.background='#d4af37'; this.style.padding='10px 20px';" onmouseout="this.style.color='#d4af37'; this.style.background='transparent'; this.style.padding='0';">
+                0791 302 007
+            </a>
+        </p>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="divider"></div>
+            <p>© 2025 Ruben Oesch. Alle Rechte vorbehalten.</p>
+            <div class="footer-links">
+                <a href="tel:+41791302007">📞 0791 302 007</a>
+                <a href="mailto:ruben@example.com">✉️ Kontakt</a>
+            </div>
+            <p style="font-size: 0.85rem; color: #999;">Professionell, Effizient, Zuverlässig</p>
+        </div>
+    </footer>
 </body>
 </html>
