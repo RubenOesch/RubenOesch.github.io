@@ -153,8 +153,8 @@ body::before {
 .white-transition {
   position: relative;
   margin-top: 80px;
-  /* fade bg from dark to white */
-  background: linear-gradient(to bottom, var(--bg) 0%, #1a1714 8%, #4a4540 22%, #a09888 42%, var(--pure) 62%, var(--pure) 100%);
+  /* keep the background light (no dark transition) */
+  background: linear-gradient(to bottom, var(--bg) 0%, var(--bg) 100%);
   padding-bottom: 0;
 }
 
