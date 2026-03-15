@@ -12,7 +12,7 @@
 :root {
   --bg: #080808;
   --white: #e8e4dc;
-  --dim: #3a3632;
+  --dim: #bdb7ab; /* slightly lighter for better readability */
   --faint: #131210;
   --accent: #c8b89a;
   --pure: #ffffff;
@@ -97,7 +97,7 @@ body::before {
 .hero-pct-sub { font-style: italic; font-size: 1.05rem; color: var(--dim); margin-top: 12px; }
 
 /* ── DOTS ── */
-.dots-year { display: flex; flex-wrap: wrap; gap: 4px 4px; }
+.dots-year { display: flex; flex-direction: column; gap: 8px 0; }
 .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 .dot.past   { background: var(--accent); }
 .dot.today  { background: var(--white); animation: blink 2s ease infinite; }
@@ -259,7 +259,7 @@ body::before {
   <!-- HERO -->
   <div class="yr-tag fi fi1">Ruben Oesch — 28.07.2009</div>
   <div class="fi fi2">
-    <h1 class="hero-name">Mehr<em>wert</em><br>bringen.</h1>
+    <h1 class="hero-name">Bringing Value to Humanity</h1>
     <p class="hero-sub">Nicht Geld. Nicht Status.<br>Menschen wachsen lassen — durch echte Verbindung, Tiefe und Präsenz.</p>
   </div>
 
@@ -301,6 +301,31 @@ body::before {
 
   <div class="rule reveal"></div>
 
+  <!-- NUMEROLOGY CALCULATOR -->
+  <div class="reveal">
+    <div class="section-tag">Numerologie Rechner</div>
+    <p class="body-text">Gib dein Geburtsdatum und deinen vollen Namen ein, um Life Path, Expression Number und The Circle zu berechnen.</p>
+    <div class="body-text" style="margin-top:18px;">
+      <label>
+        Geburtsdatum<br>
+        <input id="numDate" type="date" value="2009-07-28" style="margin-top:6px;padding:10px;min-width:220px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:var(--white);">
+      </label>
+    </div>
+    <div class="body-text" style="margin-top:12px;">
+      <label>
+        Vollständiger Name<br>
+        <input id="numName" type="text" value="Ruben Oesch" style="margin-top:6px;padding:10px;min-width:220px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:var(--white);">
+      </label>
+    </div>
+    <div class="body-text" style="margin-top:18px;">
+      <div><strong>Life Path:</strong> <span id="numLifePath">—</span></div>
+      <div><strong>Expression Number:</strong> <span id="numExpression">—</span></div>
+      <div><strong>The Circle:</strong> <span id="numCircle">—</span></div>
+    </div>
+  </div>
+
+  <div class="rule reveal"></div>
+
   <!-- VISION -->
   <div class="reveal">
     <div class="section-tag">Vision 2026–2030</div>
@@ -317,7 +342,7 @@ body::before {
   </div>
   <div class="rule reveal"></div>
   <div class="reveal">
-    <div class="section-tag">365 Tage — 2026</div>
+    <div class="section-tag">365 Tage — <span id="yearTag">2026</span></div>
     <div class="dots-year" id="yearDots"></div>
     <div class="dots-cap" id="dayCap"></div>
   </div>
@@ -330,8 +355,9 @@ body::before {
   <div class="rule reveal"></div>
   <div class="counters reveal">
     <div class="cline"><span class="clabel">Sekunden — heute vergangen</span><span class="cval" id="s1">—</span></div>
-    <div class="cline"><span class="clabel">Sekunden — 2026 vergangen</span><span class="cval" id="s2">—</span></div>
+    <div class="cline"><span class="clabel">Sekunden — <span id="yearLabel">2026</span> vergangen</span><span class="cval" id="s2">—</span></div>
     <div class="cline"><span class="clabel">Sekunden — in deinem Leben</span><span class="cval" id="s3">—</span></div>
+    <div class="cline"><span class="clabel">Aktuelle Uhrzeit</span><span class="cval" id="currentTime">—</span></div>
   </div>
   <div class="closing reveal">
     „Der heutige Tag wird nie wiederkommen."
@@ -396,25 +422,118 @@ const LIFE = 80;
 const TOTAL_WEEKS = LIFE * 52;
 const MS_PER_WEEK = 7 * 24 * 3600 * 1000;
 
+function getBirthDate(){
+  const input = document.getElementById('numDate')?.value;
+  const d = new Date(input);
+  if (d instanceof Date && !isNaN(d)) return d;
+  return BIRTH;
+}
+
 function fmt(n){ return n.toLocaleString('de-CH'); }
 function fmtPct(n){ return n.toLocaleString('de-CH',{minimumFractionDigits:6,maximumFractionDigits:6}); }
-function dayOfYear(d){ return Math.floor((d - new Date(d.getFullYear(),0,0)) / 86400000); }
+
+function getPersonalYearRange(birth, now = new Date()){
+  const thisYear = new Date(now.getFullYear(), birth.getMonth(), birth.getDate());
+  const start = (now < thisYear)
+    ? new Date(now.getFullYear() - 1, birth.getMonth(), birth.getDate())
+    : thisYear;
+  const end = new Date(start.getFullYear() + 1, birth.getMonth(), birth.getDate());
+  return { start, end };
+}
+
+function reduceNumber(n){
+  const keepMasters = [11,22,33];
+  while(n > 9 && !keepMasters.includes(n)){
+    n = String(n).split('').reduce((s,d)=>s+Number(d),0);
+  }
+  return n;
+}
+
+function lifePathFromDate(d){
+  if(!d || isNaN(d.getTime())) return '—';
+  const day = d.getDate();
+  const month = d.getMonth() + 1;
+  const year = d.getFullYear();
+  const sum = reduceNumber(day) + reduceNumber(month) + reduceNumber(year);
+  return reduceNumber(sum);
+}
+
+const LETTER_MAP = {
+  A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,I:9,
+  J:1,K:2,L:3,M:4,N:5,O:6,P:7,Q:8,R:9,
+  S:1,T:2,U:3,V:4,W:5,X:6,Y:7,Z:8
+};
+
+function expressionNumberFromName(name){
+  if(!name) return '—';
+  const sum = String(name)
+    .toUpperCase()
+    .split('')
+    .map(c => LETTER_MAP[c] || 0)
+    .reduce((a,b)=>a+b,0);
+  return reduceNumber(sum);
+}
+
+function circleNumberFromDate(d){
+  if(!d || isNaN(d.getTime())) return '—';
+  const day = d.getDate();
+  return day + ' → ' + reduceNumber(day);
+}
+
+function updateNumerology(){
+  const date = getBirthDate();
+  const name = document.getElementById('numName').value;
+  document.getElementById('numLifePath').textContent = lifePathFromDate(date);
+  document.getElementById('numExpression').textContent = expressionNumberFromName(name);
+  document.getElementById('numCircle').textContent = circleNumberFromDate(date);
+  updateLifeGrid();
+  updateYearDots();
+}
 
 (function(){
-  const today = new Date();
-  const doy = dayOfYear(today);
-  const c = document.getElementById('yearDots');
-  for(let i=1;i<=365;i++){
-    const el = document.createElement('div');
-    el.className = 'dot ' + (i < doy ? 'past' : i===doy ? 'today' : 'future');
-    c.appendChild(el);
-  }
-  document.getElementById('dayCap').textContent = 'Tag ' + doy + ' von 365 — noch ' + (365 - doy) + ' Tage bleiben.';
+  document.getElementById('numDate').addEventListener('input', updateNumerology);
+  document.getElementById('numName').addEventListener('input', updateNumerology);
+  updateNumerology();
 })();
 
-(function(){
-  const livedNow = Math.floor((new Date() - BIRTH) / MS_PER_WEEK);
+function dayOfYear(d){ return Math.floor((d - new Date(d.getFullYear(),0,0)) / 86400000); }
+
+function updateYearDots(){
+  const today = new Date();
+  const yearStart = new Date(today.getFullYear(), 0, 1); // 1. Januar
+  const yearEnd = new Date(today.getFullYear() + 1, 0, 1); // 1. Januar nächstes Jahr
+  const totalDays = Math.floor((yearEnd - yearStart) / (1000 * 60 * 60 * 24));
+  const dayOfYear = Math.floor((today - yearStart) / (1000 * 60 * 60 * 24)) + 1;
+
+  const months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; // Tage pro Monat in 2026 (kein Schaltjahr)
+
+  const c = document.getElementById('yearDots');
+  c.innerHTML = '';
+  let dayCounter = 1;
+  for(let month=0; month<12; month++){
+    const monthDiv = document.createElement('div');
+    monthDiv.className = 'month-row';
+    monthDiv.style.display = 'flex';
+    monthDiv.style.flexDirection = 'row';
+    for(let d=1; d<=months[month]; d++){
+      const el = document.createElement('div');
+      el.className = 'dot ' + (dayCounter < dayOfYear ? 'past' : dayCounter===dayOfYear ? 'today' : 'future');
+      monthDiv.appendChild(el);
+      dayCounter++;
+    }
+    c.appendChild(monthDiv);
+  }
+  document.getElementById('dayCap').textContent = 'Tag ' + dayOfYear + ' von ' + totalDays + ' — noch ' + (totalDays - dayOfYear) + ' Tage bleiben.';
+  document.getElementById('yearTag').textContent = today.getFullYear();
+}
+
+updateYearDots();
+
+function updateLifeGrid(){
+  const birth = getBirthDate();
+  const livedNow = Math.floor((new Date() - birth) / MS_PER_WEEK);
   const c = document.getElementById('lifeGrid');
+  c.innerHTML = '';
   for(let i=0;i<TOTAL_WEEKS;i++){
     const el = document.createElement('div');
     el.className = 'ldot ' + (i < livedNow-1 ? 'lived' : i===livedNow-1 ? 'now' : 'left');
@@ -425,18 +544,24 @@ function dayOfYear(d){ return Math.floor((d - new Date(d.getFullYear(),0,0)) / 8
   document.getElementById('lifeCap').innerHTML =
     'Jeder Punkt = 1 Woche. Du hast <strong>' + fmt(livedNow) + ' Wochen</strong> gelebt — ' +
     '<strong>' + pct + '%</strong> weg.<br>Es bleiben ~<strong>' + fmt(left) + ' Wochen</strong>.';
-})();
+}
+
+updateLifeGrid();
 
 function tick(){
   const now = new Date();
-  const yearStart = new Date(now.getFullYear(),0,1);
-  const yearEnd   = new Date(now.getFullYear()+1,0,1);
-  const pct = (now - yearStart)/(yearEnd - yearStart)*100;
+  const birth = getBirthDate();
+  const personalYearStart = new Date(now.getFullYear(), 0, 1); // 1. Januar
+  const personalYearEnd = new Date(now.getFullYear() + 1, 0, 1); // 1. Januar nächstes Jahr
+  let pct = (now - personalYearStart) / (personalYearEnd - personalYearStart) * 100;
+  pct = Math.min(Math.max(pct, 0), 100);
   document.getElementById('pct').firstChild.textContent = fmtPct(pct);
   const midnight = new Date(now.getFullYear(),now.getMonth(),now.getDate());
   document.getElementById('s1').textContent = fmt(Math.floor((now-midnight)/1000));
-  document.getElementById('s2').textContent = fmt(Math.floor((now-yearStart)/1000));
-  document.getElementById('s3').textContent = fmt(Math.floor((now - BIRTH) / 1000));
+  document.getElementById('s2').textContent = fmt(Math.floor((now - personalYearStart)/1000));
+  document.getElementById('s3').textContent = fmt(Math.floor((now - birth) / 1000));
+  document.getElementById('yearLabel').textContent = now.getFullYear();
+  document.getElementById('currentTime').textContent = now.toLocaleTimeString('de-CH');
 }
 tick();
 setInterval(tick, 100);
